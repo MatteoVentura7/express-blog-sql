@@ -1,13 +1,20 @@
+// DATABASE
+const connection = require("../data/db");
+
+// FAKE DATABASE
 const postData = require("../data/postData");
+
 // Index
+
 const index = (req, res) => {
-  let postFiltered = postData;
-  const { tags } = req.query;
-  if (tags) {
-    postFiltered = postFiltered.filter((post) => post.tags.includes(tags));
-  }
-  res.json(postFiltered);
+  const sql = `SELECT * FROM db_blog.posts`;
+
+  connection.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json(results);
+  });
 };
+
 // Show
 const show = (req, res) => {
   const post = postData.find((elm) => elm.id == req.params.id);
