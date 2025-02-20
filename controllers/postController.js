@@ -71,13 +71,15 @@ const modify = (req, res) => {
 };
 // Delete
 const destroy = (req, res) => {
-  const post = postData.find((elm) => elm.id == req.params.id);
-  if (!post) {
-    return res.status(404).json({
-      error: "Post not found",
-    });
-  }
-  postData.splice(postData.indexOf(post), 1);
-  res.sendStatus(204);
+  const sql = `DELETE
+    FROM db_blog.posts
+    WHERE id = ?`;
+
+  const id = req.params.id;
+
+  connection.query(sql, [id], (err) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.sendStatus(204);
+  });
 };
 module.exports = { index, show, store, update, modify, destroy };
