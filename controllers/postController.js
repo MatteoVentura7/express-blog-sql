@@ -17,13 +17,34 @@ const index = (req, res) => {
 
 // Show
 const show = (req, res) => {
-  const post = postData.find((elm) => elm.id == req.params.id);
-  if (!post) {
-    return res.status(404).json({
-      error: "Post not found",
+  const blogSql = `SELECT *
+        FROM db_blog.posts
+        WHERE id = ?`;
+
+  const tagsSql = ` SELECT  tags.label
+        FROM db_blog.tags
+        JOIN post_tag ON post_tag.tag_id = tags.id
+        JOIN posts ON post_tag.post_id = posts.id
+        WHERE post_tag.post_id = ?`;
+
+  const id = req.params.id;
+
+  connection.query(blogSql, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+
+    const blog = results[0];
+
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    connection.query(tagsSql, [id], (err, results) => {
+      if (err) return res.status(500).json({ error: "Database query failed" });
+      console.log(results);
+      blog.tags = results;
+      res.json(blog);
     });
-  }
-  res.json(post);
+  });
 };
 // Store
 const store = (req, res) => {
@@ -70,6 +91,7 @@ const modify = (req, res) => {
   res.json(post);
 };
 // Delete
+
 const destroy = (req, res) => {
   const sql = `DELETE
     FROM db_blog.posts
