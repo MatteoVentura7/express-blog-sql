@@ -1,0 +1,23 @@
+{
+  "name": "express-blog-intro",
+  "version": "1.0.0",
+  "description": "Blog",
+  "main": "script.js",
+  "scripts": {
+    "start": "node script.js",
+    "watch": "node --watch script.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatteoVentura7/express-blog-intro.git"
+  },
+  "author": "Matteo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatteoVentura7/express-blog-intro/issues"
+  },
+  "homepage": "https://github.com/MatteoVentura7/express-blog-intro#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
